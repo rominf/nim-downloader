@@ -1,0 +1,12 @@
+# Package
+
+version       = "0.1.0"
+author        = "Roman Inflianskas"
+description   = "Nim library for downloading files with a progress bar"
+license       = "Apache-2.0"
+srcDir        = "src"
+
+
+# Dependencies
+
+requires "nim >= 1.4.2, https://github.com/de-odex/suru#head"
