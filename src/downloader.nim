@@ -8,11 +8,13 @@ import suru
 proc downloadFile*(url: string, filename: string) {.async.} =
   var bars = none(SuruBar)
   var downloaded = 0
+  var fileSize: int
 
   proc onProgressChanged(total, progress, speed: BiggestInt) {.async.} =
     if bars.isNone:
       bars = some(initSuruBar())
-      bars.get.setup(int(total))
+      fileSize = int(total)
+      bars.get.setup(fileSize)
     let progress = int(progress)
     let diff = progress - downloaded
     downloaded = progress
@@ -22,3 +24,6 @@ proc downloadFile*(url: string, filename: string) {.async.} =
   var client = newAsyncHttpClient()
   client.onProgressChanged = onProgressChanged
   await client.downloadFile(url, filename)
+  bars.get[0].inc(fileSize - downloaded)
+  bars.get.update()
+  bars.get.finish()
